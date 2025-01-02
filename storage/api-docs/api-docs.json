@@ -1,0 +1,1772 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Documentation",
+        "description": "This is the API documentation for the Social API project",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api": {},
+        "/api/comments": {
+            "get": {
+                "tags": [
+                    "Comment"
+                ],
+                "summary": "Get all comments",
+                "description": "Retrieve a list of all comments with associated profiles and posts.",
+                "operationId": "getAllComments",
+                "responses": {
+                    "200": {
+                        "description": "A list of comments",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "Comment ID",
+                                                "type": "integer"
+                                            },
+                                            "content": {
+                                                "description": "Comment content",
+                                                "type": "string"
+                                            },
+                                            "profile": {
+                                                "description": "Profile of the commenter",
+                                                "properties": {
+                                                    "id": {
+                                                        "description": "Profile ID",
+                                                        "type": "integer"
+                                                    },
+                                                    "name": {
+                                                        "description": "Profile name",
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "post": {
+                                                "description": "Post related to the comment",
+                                                "properties": {
+                                                    "id": {
+                                                        "description": "Post ID",
+                                                        "type": "integer"
+                                                    },
+                                                    "content": {
+                                                        "description": "Post content",
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "created_at": {
+                                                "description": "Creation time",
+                                                "type": "string",
+                                                "format": "date-time"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Comment"
+                ],
+                "summary": "Create a new comment",
+                "description": "Create a new comment for a specific post and profile.",
+                "operationId": "createComment",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "profile_id",
+                                    "post_id",
+                                    "content"
+                                ],
+                                "properties": {
+                                    "profile_id": {
+                                        "description": "Profile ID of the commenter",
+                                        "type": "integer"
+                                    },
+                                    "post_id": {
+                                        "description": "Post ID the comment belongs to",
+                                        "type": "integer"
+                                    },
+                                    "content": {
+                                        "description": "Content of the comment",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Comment created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Success message",
+                                            "type": "string"
+                                        },
+                                        "comment": {
+                                            "properties": {
+                                                "id": {
+                                                    "description": "Comment ID",
+                                                    "type": "integer"
+                                                },
+                                                "content": {
+                                                    "description": "Comment content",
+                                                    "type": "string"
+                                                },
+                                                "profile": {
+                                                    "description": "Profile of the commenter",
+                                                    "properties": {
+                                                        "id": {
+                                                            "description": "Profile ID",
+                                                            "type": "integer"
+                                                        },
+                                                        "name": {
+                                                            "description": "Profile name",
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "post": {
+                                                    "description": "Post related to the comment",
+                                                    "properties": {
+                                                        "id": {
+                                                            "description": "Post ID",
+                                                            "type": "integer"
+                                                        },
+                                                        "content": {
+                                                            "description": "Post content",
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/followers": {
+            "post": {
+                "tags": [
+                    "Follower"
+                ],
+                "summary": "Follow a user",
+                "description": "Allows a user to follow another user.",
+                "operationId": "followUser",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "follower_id",
+                                    "followed_id"
+                                ],
+                                "properties": {
+                                    "follower_id": {
+                                        "description": "ID of the profile following the other user",
+                                        "type": "integer"
+                                    },
+                                    "followed_id": {
+                                        "description": "ID of the profile being followed",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Follow created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "Follow relation ID",
+                                            "type": "integer"
+                                        },
+                                        "follower_id": {
+                                            "description": "Follower profile ID",
+                                            "type": "integer"
+                                        },
+                                        "followed_id": {
+                                            "description": "Followed profile ID",
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Error message",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Follower"
+                ],
+                "summary": "Unfollow a user",
+                "description": "Allows a user to unfollow another user.",
+                "operationId": "unfollowUser",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "follower_id",
+                                    "followed_id"
+                                ],
+                                "properties": {
+                                    "follower_id": {
+                                        "description": "ID of the profile unfollowing the other user",
+                                        "type": "integer"
+                                    },
+                                    "followed_id": {
+                                        "description": "ID of the profile being unfollowed",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Unfollowed successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Success message",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Follow relation not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Error message",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/likes": {
+            "post": {
+                "tags": [
+                    "Like"
+                ],
+                "summary": "Create a like for a post",
+                "description": "Allows a user to like a specific post.",
+                "operationId": "likePost",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "post_id",
+                                    "profile_id"
+                                ],
+                                "properties": {
+                                    "post_id": {
+                                        "description": "ID of the post to like",
+                                        "type": "integer"
+                                    },
+                                    "profile_id": {
+                                        "description": "ID of the profile liking the post",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Like created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "Like ID",
+                                            "type": "integer"
+                                        },
+                                        "profile_id": {
+                                            "description": "Profile ID that liked the post",
+                                            "type": "integer"
+                                        },
+                                        "post_id": {
+                                            "description": "Post ID that is liked",
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Error message",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Like"
+                ],
+                "summary": "Remove a like from a post",
+                "description": "Allows a user to remove their like from a specific post.",
+                "operationId": "removeLike",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "post_id",
+                                    "profile_id"
+                                ],
+                                "properties": {
+                                    "post_id": {
+                                        "description": "ID of the post to unlike",
+                                        "type": "integer"
+                                    },
+                                    "profile_id": {
+                                        "description": "ID of the profile removing the like",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Like removed successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Success message",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Like not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Error message",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/posts": {
+            "get": {
+                "tags": [
+                    "Post"
+                ],
+                "summary": "Get all posts",
+                "description": "Retrieve a list of all posts.",
+                "operationId": "getAllPosts",
+                "responses": {
+                    "200": {
+                        "description": "A list of posts",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "Post ID",
+                                                "type": "integer"
+                                            },
+                                            "content": {
+                                                "description": "Post content",
+                                                "type": "string"
+                                            },
+                                            "image_url": {
+                                                "description": "Image URL",
+                                                "type": "string"
+                                            },
+                                            "profile": {
+                                                "description": "Profile of the post author",
+                                                "properties": {
+                                                    "id": {
+                                                        "description": "Profile ID",
+                                                        "type": "integer"
+                                                    },
+                                                    "name": {
+                                                        "description": "Profile name",
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "created_at": {
+                                                "description": "Creation time",
+                                                "type": "string",
+                                                "format": "date-time"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Post"
+                ],
+                "summary": "Create a new post",
+                "description": "Create a new post with content, an optional image, and link it to a profile.",
+                "operationId": "createPost",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "profile_id",
+                                    "content"
+                                ],
+                                "properties": {
+                                    "profile_id": {
+                                        "description": "Profile ID associated with the post",
+                                        "type": "integer"
+                                    },
+                                    "content": {
+                                        "description": "Post content",
+                                        "type": "string"
+                                    },
+                                    "image_url": {
+                                        "description": "Optional image file",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Post created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Success message",
+                                            "type": "string"
+                                        },
+                                        "post": {
+                                            "properties": {
+                                                "id": {
+                                                    "description": "Post ID",
+                                                    "type": "integer"
+                                                },
+                                                "content": {
+                                                    "description": "Post content",
+                                                    "type": "string"
+                                                },
+                                                "image_url": {
+                                                    "description": "Image URL",
+                                                    "type": "string"
+                                                },
+                                                "profile": {
+                                                    "description": "Profile of the post author",
+                                                    "properties": {
+                                                        "id": {
+                                                            "description": "Profile ID",
+                                                            "type": "integer"
+                                                        },
+                                                        "name": {
+                                                            "description": "Profile name",
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/profiles": {
+            "get": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Get all profiles",
+                "description": "Retrieve a list of all user profiles.",
+                "operationId": "getAllProfiles",
+                "responses": {
+                    "200": {
+                        "description": "A list of profiles",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "Profile ID",
+                                                "type": "integer"
+                                            },
+                                            "username": {
+                                                "description": "Username",
+                                                "type": "string"
+                                            },
+                                            "email": {
+                                                "description": "Email address",
+                                                "type": "string"
+                                            },
+                                            "profile_picture": {
+                                                "description": "Profile picture URL",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Create a new profile",
+                "description": "Create a new user profile with username, email, password, and profile picture.",
+                "operationId": "createProfile",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "username",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "username": {
+                                        "description": "Username",
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "description": "Email address",
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "description": "Password",
+                                        "type": "string",
+                                        "minLength": 8
+                                    },
+                                    "profile_picture": {
+                                        "description": "Profile picture (file upload)",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Profile created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Success message",
+                                            "type": "string"
+                                        },
+                                        "profile": {
+                                            "properties": {
+                                                "id": {
+                                                    "description": "Profile ID",
+                                                    "type": "integer"
+                                                },
+                                                "username": {
+                                                    "description": "Username",
+                                                    "type": "string"
+                                                },
+                                                "email": {
+                                                    "description": "Email address",
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "description": "Validation error message",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/register": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Register a new user",
+                "description": "Create a new user account with name, email, and password.",
+                "operationId": "registerUser",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Full name of the user",
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "description": "Email address of the user",
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "description": "Password for the user",
+                                        "type": "string",
+                                        "minLength": 6
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "User successfully created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "user": {
+                                            "properties": {
+                                                "id": {
+                                                    "description": "User ID",
+                                                    "type": "integer"
+                                                },
+                                                "name": {
+                                                    "description": "User's name",
+                                                    "type": "string"
+                                                },
+                                                "email": {
+                                                    "description": "User's email address",
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "description": "Validation error message",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "description": "Error message",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Login a user",
+                "description": "Authenticate the user with email and password and return an authentication token.",
+                "operationId": "loginUser",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "description": "User email",
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "description": "User password",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User logged in successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "description": "Authentication token",
+                                            "type": "string"
+                                        },
+                                        "user": {
+                                            "properties": {
+                                                "id": {
+                                                    "description": "User ID",
+                                                    "type": "integer"
+                                                },
+                                                "name": {
+                                                    "description": "User name",
+                                                    "type": "string"
+                                                },
+                                                "email": {
+                                                    "description": "User email",
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid credentials",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "description": "Error message",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/comments/{id}": {
+            "get": {
+                "tags": [
+                    "Comment"
+                ],
+                "summary": "Get a specific comment",
+                "description": "Retrieve a specific comment by ID, including the profile and post.",
+                "operationId": "getComment",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Comment ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Comment details",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "Comment ID",
+                                            "type": "integer"
+                                        },
+                                        "content": {
+                                            "description": "Comment content",
+                                            "type": "string"
+                                        },
+                                        "profile": {
+                                            "description": "Profile of the commenter",
+                                            "properties": {
+                                                "id": {
+                                                    "description": "Profile ID",
+                                                    "type": "integer"
+                                                },
+                                                "name": {
+                                                    "description": "Profile name",
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "post": {
+                                            "description": "Post related to the comment",
+                                            "properties": {
+                                                "id": {
+                                                    "description": "Post ID",
+                                                    "type": "integer"
+                                                },
+                                                "content": {
+                                                    "description": "Post content",
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "created_at": {
+                                            "description": "Creation time",
+                                            "type": "string",
+                                            "format": "date-time"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Comment not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Error message",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Comment"
+                ],
+                "summary": "Update an existing comment",
+                "description": "Update a comment's content by ID.",
+                "operationId": "updateComment",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Comment ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "content"
+                                ],
+                                "properties": {
+                                    "content": {
+                                        "description": "Updated content of the comment",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Comment updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Success message",
+                                            "type": "string"
+                                        },
+                                        "comment": {
+                                            "properties": {
+                                                "id": {
+                                                    "description": "Comment ID",
+                                                    "type": "integer"
+                                                },
+                                                "content": {
+                                                    "description": "Updated comment content",
+                                                    "type": "string"
+                                                },
+                                                "profile": {
+                                                    "description": "Profile of the commenter",
+                                                    "properties": {
+                                                        "id": {
+                                                            "description": "Profile ID",
+                                                            "type": "integer"
+                                                        },
+                                                        "name": {
+                                                            "description": "Profile name",
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "post": {
+                                                    "description": "Post related to the comment",
+                                                    "properties": {
+                                                        "id": {
+                                                            "description": "Post ID",
+                                                            "type": "integer"
+                                                        },
+                                                        "content": {
+                                                            "description": "Post content",
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Comment"
+                ],
+                "summary": "Delete a comment",
+                "description": "Delete a comment by ID.",
+                "operationId": "deleteComment",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Comment ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Comment deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Success message",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Comment not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Error message",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/posts/{id}": {
+            "get": {
+                "tags": [
+                    "Post"
+                ],
+                "summary": "Get a specific post",
+                "description": "Retrieve a specific post by ID.",
+                "operationId": "getPost",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Post ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Post details",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "Post ID",
+                                            "type": "integer"
+                                        },
+                                        "content": {
+                                            "description": "Post content",
+                                            "type": "string"
+                                        },
+                                        "image_url": {
+                                            "description": "Image URL",
+                                            "type": "string"
+                                        },
+                                        "profile": {
+                                            "description": "Profile of the post author",
+                                            "properties": {
+                                                "id": {
+                                                    "description": "Profile ID",
+                                                    "type": "integer"
+                                                },
+                                                "name": {
+                                                    "description": "Profile name",
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "created_at": {
+                                            "description": "Creation time",
+                                            "type": "string",
+                                            "format": "date-time"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Post not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Error message",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Post"
+                ],
+                "summary": "Update an existing post",
+                "description": "Update a post by ID, including content and optionally an image.",
+                "operationId": "updatePost",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Post ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "content"
+                                ],
+                                "properties": {
+                                    "content": {
+                                        "description": "Post content",
+                                        "type": "string"
+                                    },
+                                    "image_url": {
+                                        "description": "Optional image URL",
+                                        "type": "string",
+                                        "format": "uri"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Post updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Success message",
+                                            "type": "string"
+                                        },
+                                        "post": {
+                                            "properties": {
+                                                "id": {
+                                                    "description": "Post ID",
+                                                    "type": "integer"
+                                                },
+                                                "content": {
+                                                    "description": "Post content",
+                                                    "type": "string"
+                                                },
+                                                "image_url": {
+                                                    "description": "Image URL",
+                                                    "type": "string"
+                                                },
+                                                "profile": {
+                                                    "description": "Profile of the post author",
+                                                    "properties": {
+                                                        "id": {
+                                                            "description": "Profile ID",
+                                                            "type": "integer"
+                                                        },
+                                                        "name": {
+                                                            "description": "Profile name",
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Post"
+                ],
+                "summary": "Delete a post",
+                "description": "Delete a post by ID.",
+                "operationId": "deletePost",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Post ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Post deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Success message",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Post not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Error message",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/profiles/{id}": {
+            "get": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Get a specific profile",
+                "description": "Retrieve a specific user profile by ID.",
+                "operationId": "getProfile",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Profile ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Profile details",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "Profile ID",
+                                            "type": "integer"
+                                        },
+                                        "username": {
+                                            "description": "Username",
+                                            "type": "string"
+                                        },
+                                        "email": {
+                                            "description": "Email address",
+                                            "type": "string"
+                                        },
+                                        "profile_picture": {
+                                            "description": "Profile picture URL",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Profile not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Error message",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Update a profile",
+                "description": "Update an existing profile with new data.",
+                "operationId": "updateProfile",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Profile ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "username",
+                                    "email"
+                                ],
+                                "properties": {
+                                    "username": {
+                                        "description": "Username",
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "description": "Email address",
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "description": "New password",
+                                        "type": "string",
+                                        "minLength": 8
+                                    },
+                                    "profile_picture": {
+                                        "description": "Profile picture (file upload)",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Profile updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Success message",
+                                            "type": "string"
+                                        },
+                                        "profile": {
+                                            "properties": {
+                                                "id": {
+                                                    "description": "Profile ID",
+                                                    "type": "integer"
+                                                },
+                                                "username": {
+                                                    "description": "Username",
+                                                    "type": "string"
+                                                },
+                                                "email": {
+                                                    "description": "Email address",
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "description": "Validation error message",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Profile not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Error message",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Delete a profile",
+                "description": "Delete a user profile by ID.",
+                "operationId": "deleteProfile",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Profile ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Profile deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Success message",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Profile not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Error message",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "description": "Enter your token here",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "User",
+            "description": "User"
+        },
+        {
+            "name": "Comment",
+            "description": "Comment"
+        },
+        {
+            "name": "Follower",
+            "description": "Follower"
+        },
+        {
+            "name": "Like",
+            "description": "Like"
+        },
+        {
+            "name": "Post",
+            "description": "Post"
+        },
+        {
+            "name": "Profile",
+            "description": "Profile"
+        }
+    ]
+}
